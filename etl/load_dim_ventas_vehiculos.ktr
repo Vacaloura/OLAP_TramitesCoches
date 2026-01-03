@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>load_dim_matricula</name>
+    <name>load_dim_ventas_vehiculos</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -427,16 +427,16 @@
     <clusterschemas>
     </clusterschemas>
     <created_user>-</created_user>
-    <created_date>2026/01/01 22:08:01.989</created_date>
+    <created_date>2026/01/02 16:23:41.180</created_date>
     <modified_user>-</modified_user>
-    <modified_date>2026/01/01 22:08:01.989</modified_date>
+    <modified_date>2026/01/02 16:23:41.180</modified_date>
     <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <connection>
-    <name>conexion_dwh</name>
+    <name>conection_dwh</name>
     <server>localhost</server>
     <type>MYSQL</type>
     <access>Native</access>
@@ -466,6 +466,77 @@
       </attribute>
       <attribute>
         <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>PORT_NUMBER</code>
+        <attribute>3306</attribute>
+      </attribute>
+      <attribute>
+        <code>PRESERVE_RESERVED_WORD_CASE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>QUOTE_ALL_FIELDS</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>STREAM_RESULTS</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
+        <attribute>Y</attribute>
+      </attribute>
+      <attribute>
+        <code>USE_POOLING</code>
+        <attribute>N</attribute>
+      </attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>dwh</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>tramites_dwh</database>
+    <port>3306</port>
+    <username>root</username>
+    <password>Encrypted 2be98afc86aa7f2e4cb79ce10cc9da0ce</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute>
+        <code>EXTRA_OPTION_MYSQL.defaultFetchSize</code>
+        <attribute>500</attribute>
+      </attribute>
+      <attribute>
+        <code>EXTRA_OPTION_MYSQL.useCursorFetch</code>
+        <attribute>true</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
         <attribute>N</attribute>
       </attribute>
       <attribute>
@@ -501,20 +572,65 @@
   <order>
     <hop>
       <from>CSV file input</from>
-      <to>Ordenar filas</to>
+      <to>Add sequence</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Ordenar filas</from>
-      <to>Filas Unicas</to>
+      <from>Add sequence</from>
+      <to>Rename columns</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Filas Unicas</from>
-      <to>Insertar / Actualizar</to>
+      <from>Rename columns</from>
+      <to>Fecha key</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fecha key</from>
+      <to>Localizacion key</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Localizacion key</from>
+      <to>Insert / update</to>
       <enabled>Y</enabled>
     </hop>
   </order>
+  <step>
+    <name>Add sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>dim_ventas_vehiculos_key</valuename>
+    <use_database>N</use_database>
+    <connection/>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>1</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>304</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
   <step>
     <name>CSV file input</name>
     <type>CsvInput</type>
@@ -526,7 +642,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\ainho\Desktop\FinalSI\Practico\datos\2015-2024_car_registrations_microdata_Spain.csv</filename>
+    <filename>C:\Users\ainho\Desktop\FinalSI\Practico\datos\fuentes_externas\ventas_coches_espana_2015_2024.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -542,14 +658,36 @@
     <encoding/>
     <fields>
       <field>
-        <name>COD_CLASE_MAT</name>
-        <type>Integer</type>
-        <format>#</format>
-        <currency/>
+        <name>fecha</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd</format>
+        <currency>€</currency>
         <decimal>,</decimal>
         <group>.</group>
-        <length>15</length>
-        <precision>0</precision>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>ccaa</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>20</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>provincia</name>
+        <type>String</type>
+        <format/>
+        <currency>€</currency>
+        <decimal>,</decimal>
+        <group>.</group>
+        <length>50</length>
+        <precision>-1</precision>
         <trim_type>none</trim_type>
       </field>
     </fields>
@@ -562,14 +700,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>336</yloc>
+      <xloc>128</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Filas Unicas</name>
-    <type>Unique</type>
+    <name>Fecha key</name>
+    <type>DBLookup</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -578,16 +716,29 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <count_rows>N</count_rows>
-    <count_field/>
-    <reject_duplicate_row>N</reject_duplicate_row>
-    <error_description/>
-    <fields>
-      <field>
-        <name>COD_CLASE_MAT</name>
-        <case_insensitive>N</case_insensitive>
-      </field>
-    </fields>
+    <connection>conection_dwh</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>tramites_dwh</schema>
+      <table>dim_fecha</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>fecha_venta</name>
+        <field>fecha</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>dim_fecha_key</name>
+        <rename>fecha_id</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -597,55 +748,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>704</xloc>
-      <yloc>336</yloc>
+      <xloc>624</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Ordenar filas</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <directory>%%java.io.tmpdir%%</directory>
-    <prefix>out</prefix>
-    <sort_size>1000000</sort_size>
-    <free_memory/>
-    <compress>N</compress>
-    <compress_variable/>
-    <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>COD_CLASE_MAT</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <collator_enabled>N</collator_enabled>
-        <collator_strength>0</collator_strength>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>448</xloc>
-      <yloc>336</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Insertar / Actualizar</name>
+    <name>Insert / update</name>
     <type>InsertUpdate</type>
     <description/>
     <distribute>Y</distribute>
@@ -655,21 +764,41 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>conexion_dwh</connection>
-    <commit>100</commit>
+    <connection>dwh</connection>
+    <commit>1000</commit>
     <update_bypassed>N</update_bypassed>
     <lookup>
       <schema>tramites_dwh</schema>
-      <table>dim_matricula</table>
+      <table>dim_ventas_vehiculos</table>
       <key>
-        <name>COD_CLASE_MAT</name>
-        <field>tipo_matricula</field>
+        <name>dim_ventas_vehiculos_key</name>
+        <field>dim_ventas_vehiculos_key</field>
         <condition>=</condition>
         <name2/>
       </key>
       <value>
-        <name>tipo_matricula</name>
-        <rename>COD_CLASE_MAT</rename>
+        <name>fecha_venta</name>
+        <rename>fecha_venta</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>comunidad_autonoma</name>
+        <rename>comunidad_autonoma</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>provincia</name>
+        <rename>provincia</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>dim_fecha_key</name>
+        <rename>fecha_id</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>dim_localizacion_key</name>
+        <rename>dim_localizacion_key</rename>
         <update>Y</update>
       </value>
     </lookup>
@@ -682,8 +811,104 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>960</xloc>
-      <yloc>336</yloc>
+      <xloc>1216</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Localizacion key</name>
+    <type>DBLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>4</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>conection_dwh</connection>
+    <cache>N</cache>
+    <cache_load_all>N</cache_load_all>
+    <cache_size>0</cache_size>
+    <lookup>
+      <schema>tramites_dwh</schema>
+      <table>dim_localizacion</table>
+      <orderby/>
+      <fail_on_multiple>N</fail_on_multiple>
+      <eat_row_on_failure>N</eat_row_on_failure>
+      <key>
+        <name>provincia</name>
+        <field>provincia</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name/>
+        <field>municipio</field>
+        <condition>IS NULL</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>dim_localizacion_key</name>
+        <rename>dim_localizacion_key</rename>
+        <default/>
+        <type>None</type>
+      </value>
+    </lookup>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>928</xloc>
+      <yloc>224</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Rename columns</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>fecha</name>
+        <rename>fecha_venta</rename>
+      </field>
+      <field>
+        <name>ccaa</name>
+        <rename>comunidad_autonoma</rename>
+      </field>
+      <field>
+        <name>provincia</name>
+      </field>
+      <field>
+        <name>dim_ventas_vehiculos_key</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
