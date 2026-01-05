@@ -430,7 +430,7 @@
     <created_date>2026/01/03 21:03:45.829</created_date>
     <modified_user>-</modified_user>
     <modified_date>2026/01/03 21:03:45.829</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -466,6 +466,10 @@
       </attribute>
       <attribute>
         <code>IS_CLUSTERED</code>
+        <attribute>N</attribute>
+      </attribute>
+      <attribute>
+        <code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code>
         <attribute>N</attribute>
       </attribute>
       <attribute>
@@ -521,6 +525,41 @@
     </hop>
   </order>
   <step>
+    <name>Add sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <valuename>dim_cotizantes_key</valuename>
+    <use_database>N</use_database>
+    <connection>dwh</connection>
+    <schema/>
+    <seqname>SEQ_</seqname>
+    <use_counter>Y</use_counter>
+    <counter_name/>
+    <start_at>1</start_at>
+    <increment_by>1</increment_by>
+    <max_value>999999999</max_value>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>288</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>CSV file input</name>
     <type>CsvInput</type>
     <description/>
@@ -531,7 +570,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\ainho\Desktop\FinalSI\Practico\datos\fuentes_externas\cotizantes_espana_2015_2024.csv</filename>
+    <filename>${Internal.Entry.Current.Directory}/../datos/fuentes_externas/cotizantes_espana_2015_2024.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -793,6 +832,11 @@
         <rename>dim_localizacion_key</rename>
         <update>Y</update>
       </value>
+      <value>
+        <name>num_cotizantes</name>
+        <rename>cotizantes</rename>
+        <update>N</update>
+      </value>
     </lookup>
     <attributes/>
     <cluster_schema/>
@@ -804,41 +848,6 @@
     </remotesteps>
     <GUI>
       <xloc>720</xloc>
-      <yloc>304</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>Add sequence</name>
-    <type>Sequence</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <valuename>dim_cotizantes_key</valuename>
-    <use_database>N</use_database>
-    <connection>dwh</connection>
-    <schema/>
-    <seqname>SEQ_</seqname>
-    <use_counter>Y</use_counter>
-    <counter_name/>
-    <start_at>1</start_at>
-    <increment_by>1</increment_by>
-    <max_value>999999999</max_value>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>288</xloc>
       <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>

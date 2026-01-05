@@ -642,7 +642,7 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>C:\Users\ainho\Desktop\FinalSI\Practico\datos\fuentes_externas\ventas_coches_espana_2015_2024.csv</filename>
+    <filename>${Internal.Entry.Current.Directory}/../datos/fuentes_externas/ventas_coches_espana_2015_2024.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
@@ -711,7 +711,7 @@
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
-    <copies>1</copies>
+    <copies>4</copies>
     <partitioning>
       <method>none</method>
       <schema_name/>
@@ -759,7 +759,7 @@
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
-    <copies>1</copies>
+    <copies>4</copies>
     <partitioning>
       <method>none</method>
       <schema_name/>
@@ -811,7 +811,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1216</xloc>
+      <xloc>880</xloc>
       <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>
@@ -865,7 +865,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>928</xloc>
+      <xloc>752</xloc>
       <yloc>224</yloc>
       <draw>Y</draw>
     </GUI>

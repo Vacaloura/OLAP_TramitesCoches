@@ -6,7 +6,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS fact_tramite;
 DROP TABLE IF EXISTS dim_ventas_vehiculos;
-DROP TABLE IF EXISTS dim_matriculaciones_anho;
+DROP TABLE IF EXISTS dim_cotizantes_anho;
 DROP TABLE IF EXISTS dim_localizacion;
 DROP TABLE IF EXISTS dim_fecha;
 DROP TABLE IF EXISTS dim_vehiculo;
@@ -21,7 +21,8 @@ CREATE TABLE dim_localizacion (
     comunidad_autonoma VARCHAR(50),        
     provincia VARCHAR(50),
     cod_provincia VARCHAR(50),                 
-    municipio VARCHAR(50),  
+    municipio VARCHAR(50), 
+    cod_municipio_ine VARCHAR(50), 
     `localizacion_last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
 );
 
@@ -40,36 +41,39 @@ CREATE TABLE dim_fecha (
 -- Tabla de dimensión para el vehiculo
 CREATE TABLE dim_vehiculo (
     dim_vehiculo_key INT AUTO_INCREMENT PRIMARY KEY,  
-    marca VARCHAR(20),                              
-    modelo VARCHAR(10),
+    marca VARCHAR(30),                              
+    modelo VARCHAR(30),
     bastidor VARCHAR(21),
     tipo_vehiculo VARCHAR(50), 
     propulsion VARCHAR(50),
-    potencia VARCHAR(10),
-    cilindrada VARCHAR(10),
-    tara VARCHAR(10),
-    peso_max VARCHAR(10),
-    num_plazas VARCHAR(10),
-    num_transmisiones VARCHAR(10),
+    potencia VARCHAR(20),
+    cilindrada VARCHAR(20),
+    tara VARCHAR(20),
+    peso_max VARCHAR(20),
+    num_plazas VARCHAR(20),
+    num_transmisiones VARCHAR(20),
     num_titulares INT(5),
     provincia_domicilio VARCHAR(50),
-    ind_nuevo_usado VARCHAR(10),
-    kw VARCHAR(10),
-    num_plazas_max VARCHAR(10),
-    renting VARCHAR(2),
+    ind_nuevo_usado VARCHAR(20),
+    kw VARCHAR(20),
+    num_plazas_max VARCHAR(20),
+    renting VARCHAR(20),
     variante_itv VARCHAR(50),
     version_itv VARCHAR(50),
-    fabricante VARCHAR(50),
+    fabricante VARCHAR(100),
     carroceria VARCHAR(50), 
     nivel_emisiones VARCHAR(20),
-    distancia_ejes VARCHAR(10),             
+    distancia_ejes VARCHAR(20),             
     `dim_vehiculo_last_update` timestamp 
 );
+
+ALTER TABLE dim_vehiculo ADD UNIQUE INDEX idx_dim_vehiculo_bastidor (bastidor(17));
 
 -- Tabla de dimensión para la matricula y el tipo de matricula
 CREATE TABLE dim_matricula (
     dim_matricula_key INT AUTO_INCREMENT PRIMARY KEY,  
-    tipo_matricula INT(3),    
+    tipo_matricula VARCHAR(30),
+    cod_matricula VARCHAR(10),    
     `matricula_last_update` timestamp  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP                                                               
 );
 
@@ -108,15 +112,20 @@ CREATE TABLE fact_tramite (
     dim_matricula_key INT,                                              
     dim_vehiculo_key INT,                      
     dim_ventas_vehiculos_key INT,
-    dim_cotizantes_anho_key INT,                      
+    dim_cotizantes_anho_key INT, 
+    -- MEDIDAS DEL CSV           
     num_transmisiones INT,                         
     num_titulares INT,
+    potencia_cv DECIMAL(5,2),
+    cilindrada INT,
+    num_plazas INT,
+    -- MEDIDAS DERIVADAS
     ind_precinto VARCHAR(5),
-    fecha_tramite DATE,
     ind_embargo VARCHAR(5),
-    provincia_domicilio VARCHAR(50),
-    provincia_matriculacion VARCHAR(50),
-    cod_itv VARCHAR(10),      
+    nuevo VARCHAR(5),
+    usado VARCHAR(5),
+    count_tramites INT,
+    peso_neto DECIMAL(10,2), 
     `tramite_last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (dim_fecha_key) REFERENCES dim_fecha(dim_fecha_key),
     FOREIGN KEY (dim_localizacion_key) REFERENCES dim_localizacion(dim_localizacion_key),
